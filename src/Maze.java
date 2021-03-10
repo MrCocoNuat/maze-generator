@@ -362,11 +362,93 @@ public class Maze{
     
     public static void main(String[] args){
 	double odc = 0; //openDoorChance
-	if (args.length > 2) odc = Double.parseDouble(args[2]);
+	boolean help = false; //
+	boolean draw = false;
+	boolean print = false;
 	
-	Maze myMaze = new Maze(Integer.parseInt(args[0]), Integer.parseInt(args[1]), odc);
-	//System.out.println(myMaze);
-	myMaze.draw();
-	myMaze.drawSolution();
+       	int[] dimensions = new int[2];
+	int dimIndex = 0;
+	
+	//if (args.length < 2){
+	//    System.err.println("Usage: java Maze h w [-h] [-o ODC] [-d] [-p]");
+	//    System.exit(args.length);
+	//}
+	
+	for(int i = 0; i < args.length; i++){
+	    String current = args[i];
+	    if (current.charAt(0) == '-'){ //option
+		if (current.length() != 2){
+		    System.err.println("No combining options! Invalid option: " + current);
+		    System.exit(-1);
+		}
+		switch(current.charAt(1)){
+		case 'h':
+		    System.out.println("Usage: java Maze h w [-h] [-o ODC] [-d] [-t] [-p]");
+		    System.out.println("-h Shows help");
+		    System.out.println("-o Opens doors to create loops in the otherwise perfect maze, probability of ODC");
+		    System.out.println("-d Draws the solution with triangles");
+		    System.out.println("-p If present, prints the maze to stdout instead of drawing it");
+		    System.out.println("h w Height and Width of the maze, in squares.");
+		    System.exit(0);
+		    
+		case 'o':
+		    try{
+			odc = Double.parseDouble(args[++i]);
+		    }
+		    catch(NumberFormatException e){
+			System.err.println("Invalid open door chance: " + args[i]);
+			System.exit(-2);
+		    }
+		    catch(ArrayIndexOutOfBoundsException e){
+			System.err.println("No open door chance specified");
+			System.exit(-3);
+		    }
+		    break;
+		    
+		case 'd':
+		    draw = true;
+		    break;
+
+		case 'p':
+		    print = true;
+		    break;
+		   
+		default:
+		    System.err.println("Invalid option: " + current);
+		    System.exit(-4);
+		}
+	    }
+	    
+	    else{ //dimension
+		if (dimIndex < 2){
+		    try{
+			dimensions[dimIndex] = Integer.parseInt(current);
+		    }	
+		    catch(NumberFormatException e){
+			System.err.println("Dimensions come first! Invalid maze dimensions: " + current);
+			System.exit(3);
+		    }
+		    if (dimensions[dimIndex++] < 1){
+			System.err.println("Dimensions come first! Invalid maze dimensions: " + current);
+			System.exit(4);
+		    }
+		}
+	    }
+	}
+
+	if (dimensions[0] == 0 || dimensions[1] == 0){
+	    System.err.println("Unspecified maze dimensions");
+	    System.exit(5);
+	}
+       
+	Maze myMaze = new Maze(dimensions[0], dimensions[1], odc);
+
+	if (print) System.out.println(myMaze);
+	else{
+	    myMaze.draw();
+	    if (draw) myMaze.drawSolution();
+	}
+	
     }
+	
 }
