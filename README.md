@@ -1,6 +1,8 @@
 # maze-generator
 Produces perfect square mazes and optionally solves them too.
 
+![a screenshot](assets/sshot.png)
+
 Built-in help: 
 
 Usage: java Maze h w [-h] [-o ODC] [-d] [-t] [-p] \
