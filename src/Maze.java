@@ -20,7 +20,6 @@
 
 
 
-
 /*
 Generates mazes made of rooms with four sides each, and optionally outputs to stdOut,
 draws them, or draws their solution. h and l are the dimensions of the maze, and odc
